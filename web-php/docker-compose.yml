@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8083:80"
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./nginx/index.php:/var/www/html/index.php
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+        MYSQL_DATABASE: 'training'
+        MYSQL_USER: 'root'
+        MYSQL_PASSWORD: 'password'
+        MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - 3307:3306
+    volumes:
+      - db_data:/var/lib/mysql
+  php-fpm:
+    build: .
+    volumes:
+      - ./nginx/index.php:/var/www/html/index.php
+volumes:
+  db_data: {}
